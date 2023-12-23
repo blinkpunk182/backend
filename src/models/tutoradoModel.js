@@ -15,6 +15,7 @@ const tutoradoSchema = new mongoose.Schema({
     },
   ],
   ubicacion: Object,
+  fechaEnvioEmail: Date,
 });
 
 const Tutorado = mongoose.model("Tutorado", tutoradoSchema);

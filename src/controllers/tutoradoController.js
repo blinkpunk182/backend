@@ -1,6 +1,6 @@
 import Activity from "../models/activityModel.js";
 import Tutorado from "../models/tutoradoModel.js";
-
+import { haPasadoUnDia } from "../utils/extends.js";
 export const getByTuthor = async (req, res) => {
   const tutor = req.params.tutor;
   try {
@@ -204,6 +204,43 @@ export const saveLocation = async (req, res) => {
     const tutorado = await Tutorado.findByIdAndUpdate(
       idTutorado,
       { ubicacion },
+      {
+        new: true,
+      }
+    );
+
+    res.status(201).json(tutorado);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send(err);
+  }
+};
+
+export const sendEmail = async (req, res) => {
+  try {
+    const idTutorado = req.params.idTutorado;
+    let envioEmail = true;
+
+    const tutorado = await Tutorado.findById(idTutorado);
+    if (tutorado?.fechaEnvioEmail) {
+      envioEmail = haPasadoUnDia(tutorado?.fechaEnvioEmail);
+      console.log(envioEmail);
+    }
+
+    res.status(200).json(envioEmail);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send(err);
+  }
+};
+
+export const saveDateEmail = async (req, res) => {
+  try {
+    const idTutorado = req.params.idTutorado;
+
+    const tutorado = await Tutorado.findByIdAndUpdate(
+      idTutorado,
+      { fechaEnvioEmail: moment() },
       {
         new: true,
       }

@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import Activity from "../models/activityModel.js";
 import Tutorado from "../models/tutoradoModel.js";
 import { colores } from "./constants.js";
-
+import moment from "moment";
 export const getTop5 = async (tutor) => {
   try {
     const topTutorados = await Activity.find().populate("tutorado");
@@ -169,4 +169,22 @@ const getColor = () => {
   // Obtiene la clave aleatoria utilizando el índice
   const color = claves[indiceAleatorio];
   return color;
+};
+
+export const haPasadoUnDia = (fechaDada) => {
+  // Comprobar si la fecha dada es válida
+  if (!moment(fechaDada).isValid()) {
+    throw new Error("Fecha no válida");
+  }
+
+  // Obtener la fecha actual
+  const hoy = moment();
+
+  // Obtener la fecha dada
+  const fecha = moment(fechaDada);
+
+  // Comparar si ha pasado un día
+  const haPasado = hoy.diff(fecha, "days") > 0;
+
+  return haPasado;
 };
